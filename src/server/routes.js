@@ -212,6 +212,9 @@ router.get('/matches', async (req, res) => {
           <div class="disclaimer">
             Data provided by The Blue Alliance. Times subject to change.
           </div>
+          <div class="disclaimer">
+            Refreshes every minute.
+          </div>
           ${displaySortControls ? `
           <div class="sort-controls">
             Sort by:
@@ -312,6 +315,25 @@ router.get('/matches', async (req, res) => {
           </div> <!-- Close matches-container -->
         </div> <!-- Close embed-content -->
       </div> <!-- Close embed-container -->
+      <script>
+        // Auto-refresh embed content every 60 seconds (1 minute)
+        setTimeout(function() {
+          // Store current scroll position before refresh
+          const scrollPos = document.querySelector('.matches-container').scrollTop;
+          sessionStorage.setItem('scrollPosition', scrollPos.toString());
+          
+          // Refresh while preserving query parameters
+          window.location.reload();
+        }, 60000);
+        
+        // Restore scroll position after refresh
+        window.addEventListener('DOMContentLoaded', function() {
+          const savedPos = sessionStorage.getItem('scrollPosition');
+          if (savedPos) {
+            document.querySelector('.matches-container').scrollTop = parseInt(savedPos);
+          }
+        });
+      </script>
     </body>
     </html>
     `;
