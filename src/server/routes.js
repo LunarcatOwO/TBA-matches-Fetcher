@@ -63,27 +63,29 @@ router.get('/matches', async (req, res) => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Team ${formattedTeamKey.replace("frc", "")} Matches at ${eventName}</title>
       <style>
-        body {
-          font-family: Arial, sans-serif;
+        html, body {
+          height: 100%;
           margin: 0;
           padding: 0;
+          overflow: hidden;
           background: transparent;
-          overflow: hidden; /* Prevent body scrolling */
+        }
+        body {
+          font-family: Arial, sans-serif;
         }
         .embed-container {
-          max-width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
           width: 100%;
-          margin: 0 auto;
-          background-color: white;
-          overflow: hidden;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          /* Dynamic container height */
           height: ${containerHeight}px;
           display: flex;
           flex-direction: column;
-          /* Add this to ensure bottom corners are visible */
-          position: relative;
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .embed-header {
           background-color: #1c36e0;
@@ -92,18 +94,16 @@ router.get('/matches', async (req, res) => {
           font-size: 1.2em;
           font-weight: bold;
           text-align: center;
-          flex-shrink: 0;
+          flex: 0 0 auto;
           border-top-left-radius: 8px;
           border-top-right-radius: 8px;
         }
         .embed-content {
+          position: relative;
+          flex: 1 1 auto;
           display: flex;
           flex-direction: column;
-          flex-grow: 1;
           overflow: hidden;
-          /* Add this for bottom rounded corners */
-          border-bottom-left-radius: 8px;
-          border-bottom-right-radius: 8px;
         }
         .disclaimer {
           font-size: 0.7em;
@@ -111,46 +111,27 @@ router.get('/matches', async (req, res) => {
           text-align: center;
           padding: 5px 0;
           border-bottom: 1px solid #eee;
-          margin-bottom: 15px;
-          flex-shrink: 0;
+          margin-bottom: 0;
+          flex: 0 0 auto;
         }
         .sort-controls {
-          margin-bottom: 15px;
+          margin: 10px 15px;
           text-align: center;
-          flex-shrink: 0;
-          padding: 0 15px;
+          flex: 0 0 auto;
         }
         .matches-container {
-          overflow-y: auto; /* This section scrolls */
+          flex: 1 1 auto;
+          overflow-y: auto;
           padding: 0 10px 10px;
-          flex-grow: 1;
-          -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-          /* Add padding to prevent content from touching bottom edge */
-          padding-bottom: 15px;
-          /* Ensure rounded bottom corners are visible */
-          border-bottom-left-radius: 8px;
-          border-bottom-right-radius: 8px;
-        }
-        
-        /* Add this to style the scrollbar */
-        .matches-container::-webkit-scrollbar {
-          width: 8px;
-        }
-        
-        .matches-container::-webkit-scrollbar-track {
-          background: transparent;
-          margin-bottom: 8px;
-        }
-        
-        .matches-container::-webkit-scrollbar-thumb {
-          background-color: rgba(0,0,0,0.2);
-          border-radius: 10px;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: thin;
         }
         .match-card {
           margin-bottom: 15px;
           border: 1px solid #ddd;
           border-radius: 6px;
           padding: 12px;
+          background-color: white;
         }
         .match-title {
           font-weight: bold;
