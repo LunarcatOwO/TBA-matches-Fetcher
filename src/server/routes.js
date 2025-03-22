@@ -4,7 +4,7 @@ const { fetchAllianceMatches, fetchEventDetails } = require('./api');
 
 // GET /matches?eventKey=2025onnob&teamKey=frc1334&sort=date
 router.get('/matches', async (req, res) => {
-  const { eventKey, teamKey, sort = 'match' } = req.query;
+  const { eventKey, teamKey, sort = 'match', showControls = 'true' } = req.query;
   
   if (!eventKey) {
     return res.status(400).json({ error: 'Missing eventKey parameter' });
@@ -16,6 +16,9 @@ router.get('/matches', async (req, res) => {
   
   // Add frc prefix if not included
   const formattedTeamKey = teamKey.startsWith('frc') ? teamKey : `frc${teamKey}`;
+  
+  // Set displaySortControls to true by default unless explicitly set to false
+  const displaySortControls = showControls.toLowerCase() !== 'false';
   
   try {
     // Fetch both matches and event details concurrently
