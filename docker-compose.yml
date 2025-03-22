@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/lunarcatowo/TBA-matches-fetcher:main
+    image: ghcr.io/lunarcatowo/tba-matches-fetcher:main
     restart: always
     environment:
       - NODE_ENV=production
@@ -16,13 +16,13 @@ services:
       start_period: 10s
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-      - "com.centurylinklabs.watchtower.scope=TBA-matches-fetcher"
+      - "com.centurylinklabs.watchtower.scope=tba-matches-fetcher"
 
   watchtower:
     image: containrrr/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 300 --cleanup --rolling-restart --scope TBA-matches-fetcher --label-enable
+    command: --interval 300 --cleanup --rolling-restart --scope tba-matches-fetcher --label-enable
     restart: always
     environment:
       - WATCHTOWER_POLL_INTERVAL=300
