@@ -193,11 +193,13 @@ router.get('/matches', async (req, res) => {
           <div class="disclaimer">
             Data provided by The Blue Alliance. Times subject to change.
           </div>
+          ${displaySortControls ? `
           <div class="sort-controls">
             Sort by:
-            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=match" ${sort === 'match' ? 'class="active"' : ''}>Match Order</a>
-            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=date" ${sort === 'date' ? 'class="active"' : ''}>Time</a>
+            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=match${!displaySortControls ? '&showControls=false' : ''}" ${sort === 'match' ? 'class="active"' : ''}>Match Order</a>
+            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=date${!displaySortControls ? '&showControls=false' : ''}" ${sort === 'date' ? 'class="active"' : ''}>Time</a>
           </div>
+          ` : ''}
           <div class="matches-container">
     `;
     
@@ -288,9 +290,9 @@ router.get('/matches', async (req, res) => {
     }
     
     htmlContent += `
-          </div>
-        </div>
-      </div>
+          </div> <!-- Close matches-container -->
+        </div> <!-- Close embed-content -->
+      </div> <!-- Close embed-container -->
     </body>
     </html>
     `;
