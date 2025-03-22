@@ -82,6 +82,8 @@ router.get('/matches', async (req, res) => {
           height: ${containerHeight}px;
           display: flex;
           flex-direction: column;
+          /* Add this to ensure bottom corners are visible */
+          position: relative;
         }
         .embed-header {
           background-color: #1c36e0;
@@ -99,6 +101,9 @@ router.get('/matches', async (req, res) => {
           flex-direction: column;
           flex-grow: 1;
           overflow: hidden;
+          /* Add this for bottom rounded corners */
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
         }
         .disclaimer {
           font-size: 0.7em;
@@ -120,6 +125,26 @@ router.get('/matches', async (req, res) => {
           padding: 0 10px 10px;
           flex-grow: 1;
           -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+          /* Add padding to prevent content from touching bottom edge */
+          padding-bottom: 15px;
+          /* Ensure rounded bottom corners are visible */
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
+        }
+        
+        /* Add this to style the scrollbar */
+        .matches-container::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        .matches-container::-webkit-scrollbar-track {
+          background: transparent;
+          margin-bottom: 8px;
+        }
+        
+        .matches-container::-webkit-scrollbar-thumb {
+          background-color: rgba(0,0,0,0.2);
+          border-radius: 10px;
         }
         .match-card {
           margin-bottom: 15px;
