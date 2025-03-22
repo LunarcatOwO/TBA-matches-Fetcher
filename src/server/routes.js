@@ -4,7 +4,7 @@ const { fetchAllianceMatches, fetchEventDetails } = require('./api');
 
 // GET /matches?eventKey=2025onnob&teamKey=frc1334&sort=date
 router.get('/matches', async (req, res) => {
-  const { eventKey, teamKey, sort = 'match', showControls = 'true' } = req.query;
+  const { eventKey, teamKey, sort = 'match', showControls = 'true', height = '600' } = req.query;
   
   if (!eventKey) {
     return res.status(400).json({ error: 'Missing eventKey parameter' });
@@ -19,6 +19,9 @@ router.get('/matches', async (req, res) => {
   
   // Set displaySortControls to true by default unless explicitly set to false
   const displaySortControls = showControls.toLowerCase() !== 'false';
+  
+  // Parse height (default to 600px if invalid)
+  const containerHeight = parseInt(height) > 0 ? parseInt(height) : 600;
   
   try {
     // Fetch both matches and event details concurrently
@@ -65,6 +68,7 @@ router.get('/matches', async (req, res) => {
           margin: 0;
           padding: 0;
           background: transparent;
+          overflow: hidden; /* Prevent body scrolling */
         }
         .embed-container {
           max-width: 100%;
@@ -74,8 +78,8 @@ router.get('/matches', async (req, res) => {
           overflow: hidden;
           border-radius: 8px;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          /* Fixed size container */
-          height: 600px;
+          /* Dynamic container height */
+          height: ${containerHeight}px;
           display: flex;
           flex-direction: column;
         }
@@ -170,8 +174,8 @@ router.get('/matches', async (req, res) => {
         @media (min-width: 768px) {
           .embed-container {
             max-width: 800px;
-            height: 700px; /* Taller on desktop */
             margin: 0 auto;
+            /* Note: Not overriding height here anymore */
           }
           .matches-container {
             padding: 0 20px 20px;
@@ -204,8 +208,8 @@ router.get('/matches', async (req, res) => {
           ${displaySortControls ? `
           <div class="sort-controls">
             Sort by:
-            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=match${!displaySortControls ? '&showControls=false' : ''}" ${sort === 'match' ? 'class="active"' : ''}>Match Order</a>
-            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=date${!displaySortControls ? '&showControls=false' : ''}" ${sort === 'date' ? 'class="active"' : ''}>Time</a>
+            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=match&height=${containerHeight}${!displaySortControls ? '&showControls=false' : ''}" ${sort === 'match' ? 'class="active"' : ''}>Match Order</a>
+            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=date&height=${containerHeight}${!displaySortControls ? '&showControls=false' : ''}" ${sort === 'date' ? 'class="active"' : ''}>Time</a>
           </div>
           ` : ''}
           <div class="matches-container">
