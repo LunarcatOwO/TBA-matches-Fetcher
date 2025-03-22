@@ -64,6 +64,7 @@ router.get('/matches', async (req, res) => {
           font-family: Arial, sans-serif;
           margin: 0;
           padding: 0;
+          background: transparent;
         }
         .embed-container {
           max-width: 100%;
@@ -71,7 +72,9 @@ router.get('/matches', async (req, res) => {
           margin: 0 auto;
           background-color: white;
           overflow: hidden;
-          /* Fixed height for the entire container */
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          /* Fixed size container */
           height: 600px;
           display: flex;
           flex-direction: column;
@@ -84,12 +87,14 @@ router.get('/matches', async (req, res) => {
           font-weight: bold;
           text-align: center;
           flex-shrink: 0;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
         }
         .embed-content {
           display: flex;
           flex-direction: column;
           flex-grow: 1;
-          overflow: hidden; /* Hide overflow in the content container */
+          overflow: hidden;
         }
         .disclaimer {
           font-size: 0.7em;
@@ -104,11 +109,13 @@ router.get('/matches', async (req, res) => {
           margin-bottom: 15px;
           text-align: center;
           flex-shrink: 0;
+          padding: 0 15px;
         }
         .matches-container {
-          overflow-y: auto; /* Only this section scrolls */
+          overflow-y: auto; /* This section scrolls */
           padding: 0 10px 10px;
           flex-grow: 1;
+          -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
         }
         .match-card {
           margin-bottom: 15px;
@@ -164,9 +171,7 @@ router.get('/matches', async (req, res) => {
           .embed-container {
             max-width: 800px;
             height: 700px; /* Taller on desktop */
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
+            margin: 0 auto;
           }
           .matches-container {
             padding: 0 20px 20px;
