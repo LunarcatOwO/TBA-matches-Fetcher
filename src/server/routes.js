@@ -212,9 +212,6 @@ router.get('/matches', async (req, res) => {
           <div class="disclaimer">
             Data provided by The Blue Alliance. Times subject to change.
           </div>
-          <div class="disclaimer">
-            Refreshes every minute.
-          </div>
           ${displaySortControls ? `
           <div class="sort-controls">
             Sort by:
