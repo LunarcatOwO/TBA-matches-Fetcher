@@ -60,14 +60,13 @@ router.get('/matches', async (req, res) => {
         body {
           font-family: Arial, sans-serif;
           margin: 0;
-          padding: 20px;
+          padding: 0;
         }
         .embed-container {
-          max-width: 800px;
+          max-width: 100%;
+          width: 100%;
           margin: 0 auto;
           background-color: white;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
           overflow: hidden;
         }
         .embed-header {
@@ -76,6 +75,7 @@ router.get('/matches', async (req, res) => {
           padding: 15px 20px;
           font-size: 1.2em;
           font-weight: bold;
+          text-align: center;
         }
         .disclaimer {
           font-size: 0.7em;
@@ -86,13 +86,14 @@ router.get('/matches', async (req, res) => {
           margin-bottom: 15px;
         }
         .embed-content {
-          padding: 20px;
+          padding: 10px;
+          box-sizing: border-box;
         }
         .match-card {
           margin-bottom: 15px;
           border: 1px solid #ddd;
           border-radius: 6px;
-          padding: 15px;
+          padding: 12px;
         }
         .match-title {
           font-weight: bold;
@@ -101,6 +102,7 @@ router.get('/matches', async (req, res) => {
         }
         .match-detail {
           margin: 5px 0;
+          word-wrap: break-word;
         }
         .red {
           color: #CF3339;
@@ -123,12 +125,13 @@ router.get('/matches', async (req, res) => {
         }
         .sort-controls {
           margin-bottom: 15px;
-          text-align: right;
+          text-align: center;
         }
         .sort-controls a {
-          margin-left: 10px;
+          display: inline-block;
+          margin: 5px;
           text-decoration: none;
-          padding: 5px 10px;
+          padding: 8px 12px;
           border: 1px solid #ddd;
           border-radius: 4px;
           background-color: #f8f8f8;
@@ -137,6 +140,31 @@ router.get('/matches', async (req, res) => {
         .sort-controls a.active {
           background-color: #1c36e0;
           color: white;
+        }
+        
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+          .embed-container {
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+          }
+          .embed-content {
+            padding: 20px;
+          }
+          .sort-controls {
+            text-align: right;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .match-detail {
+            font-size: 0.9em;
+          }
+          .match-title {
+            font-size: 1em;
+          }
         }
       </style>
     </head>
