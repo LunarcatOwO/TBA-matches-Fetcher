@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { fetchAllianceMatches, fetchEventDetails } = require('./api');
 
-// GET /api/matches?eventKey=2025onnob&teamKey=frc1334&sort=date|match
+// GET /matches?eventKey=2025onnob&teamKey=frc1334&sort=date
 router.get('/matches', async (req, res) => {
   const { eventKey, teamKey, sort = 'match' } = req.query;
   
@@ -61,7 +61,6 @@ router.get('/matches', async (req, res) => {
           font-family: Arial, sans-serif;
           margin: 0;
           padding: 20px;
-          background-color: #f5f5f5;
         }
         .embed-container {
           max-width: 800px;
