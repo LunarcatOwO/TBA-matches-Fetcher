@@ -68,6 +68,10 @@ router.get('/matches', async (req, res) => {
           margin: 0 auto;
           background-color: white;
           overflow: hidden;
+          /* Fixed height for the entire container */
+          height: 600px;
+          display: flex;
+          flex-direction: column;
         }
         .embed-header {
           background-color: #1c36e0;
@@ -76,6 +80,13 @@ router.get('/matches', async (req, res) => {
           font-size: 1.2em;
           font-weight: bold;
           text-align: center;
+          flex-shrink: 0;
+        }
+        .embed-content {
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+          overflow: hidden; /* Hide overflow in the content container */
         }
         .disclaimer {
           font-size: 0.7em;
@@ -84,10 +95,17 @@ router.get('/matches', async (req, res) => {
           padding: 5px 0;
           border-bottom: 1px solid #eee;
           margin-bottom: 15px;
+          flex-shrink: 0;
         }
-        .embed-content {
-          padding: 10px;
-          box-sizing: border-box;
+        .sort-controls {
+          margin-bottom: 15px;
+          text-align: center;
+          flex-shrink: 0;
+        }
+        .matches-container {
+          overflow-y: auto; /* Only this section scrolls */
+          padding: 0 10px 10px;
+          flex-grow: 1;
         }
         .match-card {
           margin-bottom: 15px;
@@ -123,10 +141,6 @@ router.get('/matches', async (req, res) => {
         .winner {
           text-decoration: underline;
         }
-        .sort-controls {
-          margin-bottom: 15px;
-          text-align: center;
-        }
         .sort-controls a {
           display: inline-block;
           margin: 5px;
@@ -146,15 +160,17 @@ router.get('/matches', async (req, res) => {
         @media (min-width: 768px) {
           .embed-container {
             max-width: 800px;
+            height: 700px; /* Taller on desktop */
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             margin: 20px auto;
           }
-          .embed-content {
-            padding: 20px;
+          .matches-container {
+            padding: 0 20px 20px;
           }
           .sort-controls {
             text-align: right;
+            padding-right: 20px;
           }
         }
         
@@ -182,6 +198,7 @@ router.get('/matches', async (req, res) => {
             <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=match" ${sort === 'match' ? 'class="active"' : ''}>Match Order</a>
             <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=date" ${sort === 'date' ? 'class="active"' : ''}>Time</a>
           </div>
+          <div class="matches-container">
     `;
     
     // Process each match
@@ -271,6 +288,7 @@ router.get('/matches', async (req, res) => {
     }
     
     htmlContent += `
+          </div>
         </div>
       </div>
     </body>
