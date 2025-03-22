@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { fetchAllianceMatches, fetchEventDetails } = require('./api');
 
-// GET /matches?eventKey=2025onnob&teamKey=frc1334&sort=date&date=YYYY-MM-DD
+// GET /matches?eventKey=2025onnob&teamKey=frc1334&sort=match&date=YYYY-MM-DD
 router.get('/matches', async (req, res) => {
   const { eventKey, teamKey, sort = 'match', showControls = 'true', height = '600', date } = req.query;
   
