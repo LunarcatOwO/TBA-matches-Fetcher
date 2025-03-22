@@ -80,12 +80,13 @@ router.get('/matches', async (req, res) => {
           right: 0;
           bottom: 0;
           width: 100%;
-          height: ${containerHeight}px;
+          height: 100%; /* Use 100% instead of fixed height */
           display: flex;
           flex-direction: column;
           background-color: white;
           border-radius: 8px;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          max-height: ${containerHeight}px; /* Use max-height for the parameter */
         }
         .embed-header {
           background-color: #1c36e0;
