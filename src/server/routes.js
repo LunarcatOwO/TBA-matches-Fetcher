@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { fetchAllianceMatches, fetchEventDetails } = require('./api');
 
-// GET /matches?eventKey=2025onnob&teamKey=frc1334&sort=date
+// GET /matches?eventKey=2025onnob&teamKey=frc1334&sort=date&date=YYYY-MM-DD
 router.get('/matches', async (req, res) => {
-  const { eventKey, teamKey, sort = 'match', showControls = 'true', height = '600' } = req.query;
+  const { eventKey, teamKey, sort = 'match', showControls = 'true', height = '600', date } = req.query;
   
   if (!eventKey) {
     return res.status(400).json({ error: 'Missing eventKey parameter' });
@@ -33,8 +33,25 @@ router.get('/matches', async (req, res) => {
     // Get the event name from the details
     const eventName = eventDetails.name || eventKey;
     
+    // Filter matches by date if specified
+    let filteredMatches = [...matches];
+    let selectedDate = null;
+    
+    if (date) {
+      selectedDate = new Date(date);
+      // Check if date is valid
+      if (!isNaN(selectedDate.getTime())) {
+        // Filter matches that occur on the specified date
+        filteredMatches = filteredMatches.filter(match => {
+          const matchTimestamp = (match.predicted_time || match.time || 0) * 1000;
+          const matchDate = new Date(matchTimestamp);
+          return matchDate.toDateString() === selectedDate.toDateString();
+        });
+      }
+    }
+    
     // Sort matches based on sort parameter
-    let sortedMatches = [...matches];
+    let sortedMatches = [...filteredMatches];
     
     if (sort === 'date') {
       // Sort by predicted time or actual time
@@ -53,6 +70,14 @@ router.get('/matches', async (req, res) => {
         return a.match_number - b.match_number;
       });
     }
+    
+    // Get unique dates from matches for the date filter dropdown
+    const uniqueDates = [...new Set(matches.map(match => {
+      const timestamp = (match.predicted_time || match.time || 0) * 1000;
+      const matchDate = new Date(timestamp);
+      return matchDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+    }).filter(dateStr => dateStr !== "1970-01-01"))]
+    .sort();
     
     // Create HTML content
     let htmlContent = `
@@ -80,13 +105,13 @@ router.get('/matches', async (req, res) => {
           right: 0;
           bottom: 0;
           width: 100%;
-          height: 100%; /* Use 100% instead of fixed height */
+          height: 100%;
           display: flex;
           flex-direction: column;
           background-color: white;
           border-radius: 8px;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          max-height: ${containerHeight}px; /* Use max-height for the parameter */
+          max-height: ${containerHeight}px;
         }
         .embed-header {
           background-color: #1c36e0;
@@ -115,10 +140,25 @@ router.get('/matches', async (req, res) => {
           margin-bottom: 0;
           flex: 0 0 auto;
         }
-        .sort-controls {
+        .controls-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
           margin: 10px 15px;
-          text-align: center;
           flex: 0 0 auto;
+        }
+        .date-filter {
+          margin: 5px;
+        }
+        .date-filter select {
+          padding: 8px;
+          border-radius: 4px;
+          border: 1px solid #ddd;
+        }
+        .sort-controls {
+          margin: 5px;
+          text-align: right;
         }
         .matches-container {
           flex: 1 1 auto;
@@ -182,14 +222,9 @@ router.get('/matches', async (req, res) => {
           .embed-container {
             max-width: 800px;
             margin: 0 auto;
-            /* Note: Not overriding height here anymore */
           }
           .matches-container {
             padding: 0 20px 20px;
-          }
-          .sort-controls {
-            text-align: right;
-            padding-right: 20px;
           }
         }
         
@@ -199,6 +234,13 @@ router.get('/matches', async (req, res) => {
           }
           .match-title {
             font-size: 1em;
+          }
+          .controls-container {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .sort-controls, .date-filter {
+            text-align: center;
           }
         }
       </style>
@@ -213,10 +255,25 @@ router.get('/matches', async (req, res) => {
             Data provided by The Blue Alliance. Times subject to change.
           </div>
           ${displaySortControls ? `
-          <div class="sort-controls">
-            Sort by:
-            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=match&height=${containerHeight}${!displaySortControls ? '&showControls=false' : ''}" ${sort === 'match' ? 'class="active"' : ''}>Match Order</a>
-            <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=date&height=${containerHeight}${!displaySortControls ? '&showControls=false' : ''}" ${sort === 'date' ? 'class="active"' : ''}>Time</a>
+          <div class="controls-container">
+            <div class="date-filter">
+              <select onchange="window.location.href='?eventKey=${eventKey}&teamKey=${teamKey}&sort=${sort}&height=${containerHeight}${!displaySortControls ? '&showControls=false' : ''}&date=' + this.value">
+                <option value="">All Days</option>
+                ${uniqueDates.map(dateStr => {
+                  const formattedDate = new Date(dateStr).toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric'
+                  });
+                  return `<option value="${dateStr}" ${dateStr === date ? 'selected' : ''}>${formattedDate}</option>`;
+                }).join('')}
+              </select>
+            </div>
+            <div class="sort-controls">
+              Sort by:
+              <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=match&height=${containerHeight}${!displaySortControls ? '&showControls=false' : ''}${date ? '&date='+date : ''}" ${sort === 'match' ? 'class="active"' : ''}>Match Order</a>
+              <a href="?eventKey=${eventKey}&teamKey=${teamKey}&sort=date&height=${containerHeight}${!displaySortControls ? '&showControls=false' : ''}${date ? '&date='+date : ''}" ${sort === 'date' ? 'class="active"' : ''}>Time</a>
+            </div>
           </div>
           ` : ''}
           <div class="matches-container">
@@ -224,7 +281,7 @@ router.get('/matches', async (req, res) => {
     
     // Process each match
     if (sortedMatches.length === 0) {
-      htmlContent += `<p>No matches found for this team.</p>`;
+      htmlContent += `<p>No matches found for this team${date ? ' on the selected date' : ''}.</p>`;
     } else {
       sortedMatches.forEach(match => {
         // Determine which alliance our team is on
