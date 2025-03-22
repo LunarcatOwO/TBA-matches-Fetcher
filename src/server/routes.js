@@ -216,6 +216,11 @@ router.get('/matches', async (req, res) => {
           background-color: #1c36e0;
           color: white;
         }
+        .date-display {
+          font-size: 0.8em;
+          color: #666;
+          margin-left: 5px;
+        }
         
         /* Responsive adjustments */
         @media (min-width: 768px) {
@@ -306,6 +311,7 @@ router.get('/matches', async (req, res) => {
         
         // Time formatting - just time, no date
         let timeDisplay = "TBD";
+        let dateDisplay = "";
         
         if (match.predicted_time || match.time) {
           const timestamp = (match.predicted_time || match.time) * 1000;
@@ -314,6 +320,10 @@ router.get('/matches', async (req, res) => {
           // Format time: "10:30 AM"
           const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
           timeDisplay = matchDate.toLocaleTimeString('en-US', timeOptions);
+          
+          // Format date: "Mar 22"
+          const dateOptions = { month: 'short', day: 'numeric' };
+          dateDisplay = matchDate.toLocaleDateString('en-US', dateOptions);
         }
         
         // Get match type and number
@@ -351,6 +361,7 @@ router.get('/matches', async (req, res) => {
             <div class="match-detail">
               <span class="bold">Time:</span> 
               <span class="time-display">${timeDisplay}</span>
+              <span class="date-display">${dateDisplay}</span>
             </div>
             <div class="match-detail">
               <span class="bold">Alliance:</span> <span class="${allianceColor}">${allianceColor.charAt(0).toUpperCase() + allianceColor.slice(1)}</span>
