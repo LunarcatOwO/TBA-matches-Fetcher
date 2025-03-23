@@ -97,6 +97,8 @@ router.get('/matches', async (req, res) => {
         }
         body {
           font-family: Arial, sans-serif;
+          background-color: #000000;
+          color: #ffffff;
         }
         .embed-container {
           position: absolute;
@@ -108,13 +110,13 @@ router.get('/matches', async (req, res) => {
           height: 100%;
           display: flex;
           flex-direction: column;
-          background-color: white;
+          background-color: #000000;
           border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
           max-height: ${containerHeight}px;
         }
         .embed-header {
-          background-color: #1c36e0;
+          background-color: #CF3339;
           color: white;
           padding: 15px 20px;
           font-size: 1.2em;
@@ -133,10 +135,10 @@ router.get('/matches', async (req, res) => {
         }
         .disclaimer {
           font-size: 0.7em;
-          color: #666;
+          color: #aaaaaa;
           text-align: center;
           padding: 5px 0;
-          border-bottom: 1px solid #eee;
+          border-bottom: 1px solid #333333;
           margin-bottom: 0;
           flex: 0 0 auto;
         }
@@ -169,10 +171,10 @@ router.get('/matches', async (req, res) => {
         }
         .match-card {
           margin-bottom: 15px;
-          border: 1px solid #ddd;
+          border: 1px solid #333333;
           border-radius: 6px;
           padding: 12px;
-          background-color: white;
+          background-color: #121212;
         }
         .match-title {
           font-weight: bold;
@@ -184,10 +186,10 @@ router.get('/matches', async (req, res) => {
           word-wrap: break-word;
         }
         .red {
-          color: #CF3339;
+          color:rgb(202, 64, 68);
         }
         .blue {
-          color: #1c36e0;
+          color:rgb(74, 72, 196);
         }
         .bold {
           font-weight: bold;
@@ -207,18 +209,18 @@ router.get('/matches', async (req, res) => {
           margin: 5px;
           text-decoration: none;
           padding: 8px 12px;
-          border: 1px solid #ddd;
+          border: 1px solid #333333;
           border-radius: 4px;
-          background-color: #f8f8f8;
-          color: #333;
+          background-color: #222222;
+          color: #ffffff;
         }
         .sort-controls a.active {
-          background-color: #1c36e0;
+          background-color: #CF3339;
           color: white;
         }
         .date-display {
           font-size: 0.8em;
-          color: #666;
+          color: #aaaaaa;
           margin-left: 5px;
         }
         
