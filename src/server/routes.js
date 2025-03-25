@@ -97,7 +97,7 @@ router.get('/matches', async (req, res) => {
         }
         body {
           font-family: Arial, sans-serif;
-          background-color: #000000;
+          background-color: transparent;
           color: #ffffff;
         }
         .embed-container {
